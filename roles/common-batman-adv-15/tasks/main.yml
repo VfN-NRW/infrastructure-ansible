@@ -1,0 +1,26 @@
+---
+
+- name: 'Enable batman-adv copr'
+  shell: 'dnf -y copr enable heffer/batman-adv'
+  args:
+    creates: '/etc/yum.repos.d/_copr_heffer-batman-adv.repo'
+
+- name: 'Circumvent bug that installs debug kernel when installing kernel-headers'
+  package:
+    name: 'kernel-modules-extra'
+    state: 'latest'
+
+- name: 'Install batman-adv packages'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'batctl'
+    - 'akmod-batman-adv'
+
+- name: 'Install batman-adv module load config'
+  copy:
+    content: 'batman-adv'
+    dest: '/etc/modules-load.d/batman-adv.conf'
+  notify:
+    - 'restart systemd-modules-load'

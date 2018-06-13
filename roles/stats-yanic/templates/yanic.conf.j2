@@ -1,0 +1,47 @@
+{% set community_name = item.name %}
+{% set community_short = communities[item.name].shortname %}
+
+[respondd]
+enable           = true
+synchronize      = "1m"
+collect_interval = "1m"
+
+[[respondd.interfaces]]
+ifname = "mesh-{{ community_short }}"
+
+[nodes]
+state_path    = "/var/lib/yanic/{{ community_name }}/state.json"
+prune_after   = "7d"
+save_interval = "5s"
+offline_after = "10m"
+
+[[nodes.output.meshviewer]]
+enable   = false
+
+[[nodes.output.meshviewer-ffrgb]]
+enable   = true
+path = "/srv/www/yanic/data/{{ community_name }}/meshviewer.json"
+
+[[nodes.output.nodelist]]
+enable   = true
+path = "/srv/www/yanic/data/{{ community_name }}/nodelist.json"
+
+[database]
+delete_after    = "7d"
+delete_interval = "1h"
+
+[[database.connection.influxdb]]
+enable   = true
+address  = "http://localhost:8086"
+database = "ff{{ community_short }}"
+username = ""
+password = ""
+
+[[database.connection.graphite]]
+enable = false
+
+[[database.connection.respondd]]
+enable   = false
+
+[[database.connection.logging]]
+enable = false

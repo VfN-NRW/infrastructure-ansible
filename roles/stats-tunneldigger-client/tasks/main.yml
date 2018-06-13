@@ -1,0 +1,46 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'make sure dnf core plugins are present'
+  package:
+    name: 'dnf-plugins-core'
+    state: 'latest'
+
+- name: 'enable tunneldigger copr'
+  shell: 'dnf -y copr enable heffer/tunneldigger'
+  args:
+    creates: '/etc/yum.repos.d/_copr_heffer-tunneldigger.repo'
+
+- name: 'install tunneldigger client'
+  package:
+    name: 'tunneldigger'
+    state: 'latest'
+
+- name: 'create tunneldigger client config dir'
+  file:
+    path: '/etc/tunneldigger/client'
+    state: 'directory'
+    mode: 0755
+
+- name: 'install tunneldigger client hooks'
+  template:
+    src: 'hook.sh.j2'
+    dest: '/etc/tunneldigger/client/hook-{{ item.name }}.sh'
+    mode: 0755
+    backup: yes
+  with_items: '{{ serviced_communities }}'
+
+- name: 'install tunneldigger client configs'
+  template:
+    src: 'tunneldigger.conf.j2'
+    dest: '/etc/tunneldigger/client/{{ item.name }}.conf'
+    backup: yes
+  with_items: '{{ serviced_communities }}'
+
+- name: 'enable tunneldigger units'
+  service:
+    name: tunneldigger@{{ item.name }}
+    state: 'started'
+    enabled: True
+  with_items: '{{ serviced_communities }}'

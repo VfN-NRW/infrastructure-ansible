@@ -1,0 +1,11 @@
+---
+
+- name: 'restart kea-dhcp4'
+  service:
+    name: 'kea-dhcp4'
+    state: 'restarted'
+
+- name: 'restart kea-ctrl-agent'
+  service:
+    name: 'kea-ctrl-agent'
+    state: 'restarted'

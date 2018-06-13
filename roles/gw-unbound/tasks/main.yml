@@ -1,0 +1,30 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'Install unbound'
+  package:
+    name: 'unbound'
+    state: 'latest'
+
+- name: 'Create local configuration'
+  template:
+    src: '00-freifunk.conf.j2'
+    dest: '/etc/unbound/local.d/00-freifunk.conf'
+    backup: yes
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart unbound'
+
+- name: 'Enable unbound'
+  service:
+    name: 'unbound'
+    enabled: true
+    state: 'started'
+
+- name: 'Allow DNS in Freifunk zone'
+  firewalld:
+    zone: 'FreifunkInternal'
+    service: 'dns'
+    permanent: true
+    state: 'enabled'

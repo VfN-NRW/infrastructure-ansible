@@ -1,0 +1,84 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'make sure dnf core plugins are present'
+  package:
+    name: 'dnf-plugins-core'
+    state: 'latest'
+
+- name: 'enable tunneldigger copr'
+  shell: 'dnf -y copr enable heffer/tunneldigger'
+  args:
+    creates: '/etc/yum.repos.d/_copr_heffer-tunneldigger.repo'
+
+- name: 'Install tunneldigger and dependencies'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'bridge-utils'
+    - 'ebtables'
+    - 'iproute'
+    - 'kernel-modules-extra'
+    - 'tunneldigger-broker'
+
+- name: 'create scripts directory'
+  file:
+    state: 'directory'
+    dest: '/etc/tunneldigger/broker/scripts'
+    mode: 0755
+
+- name: 'copy up scripts'
+  template:
+    src: 'up.sh.j2'
+    dest: '/etc/tunneldigger/broker/scripts/{{ item.name }}-up.sh'
+    mode: 0755
+  with_items: '{{ serviced_communities }}'
+
+- name: 'create blacklists directory'
+  file:
+    state: 'directory'
+    dest: '/etc/tunneldigger/broker/blacklists'
+    mode: 0755
+
+- name: 'create blacklists'
+  file:
+    state: 'touch'
+    path: '/etc/tunneldigger/broker/blacklists/{{ item.name }}'
+  with_items: '{{ serviced_communities }}'
+
+- name: 'open ports in firewall'
+  firewalld:
+    port: '{{ communities[item.name].subnet4 | getoctet(2) | int + 10000}}/udp'
+    permanent: true
+    state: 'enabled'
+  with_items: '{{ serviced_communities }}'
+
+- name: 'prevent L2 loopback on tunnel bridges'
+  command: >
+    firewall-cmd
+    --permanent
+    --direct
+    --add-rule eb filter FORWARD 0
+    --logical-in tun-{{ communities[item.name].shortname }}
+    -j DROP
+  register: l2_block_result
+  changed_when: >
+    'Warning' not in l2_block_result
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'reload firewalld'
+
+- name: 'create configurations'
+  template:
+    src: 'tunneldigger.conf.j2'
+    dest: '/etc/tunneldigger/broker/{{ item.name }}.conf'
+  with_items: '{{ serviced_communities }}'
+
+- name: 'enable tunneldigger instances'
+  service:
+    enabled: true
+    state: 'restarted'
+    name: 'tunneldigger-broker@{{ item.name }}'
+  with_items: '{{ serviced_communities }}'

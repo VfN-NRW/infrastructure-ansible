@@ -1,0 +1,16 @@
+---
+
+kea_dhcp4_lfc_interval: 3600
+kea_dhcp4_valid_lifetime: 3600
+kea_dhcp4_control_socket: '/run/kea/control-dhcp4.sock'
+kea_dhcp4_loggers:
+  - { name: 'kea-dhcp4', output: '/var/log/kea-dhcp4.log', severity: 'INFO', debuglevel: 0}
+kea_dhcp4_dhcp_options:
+  - { name: 'interface-mtu', data: 1364 }
+
+kea_ctrl_agent_listen_addr: '127.0.0.1'
+kea_ctrl_agent_listen_port: '8080'
+kea_ctrl_agent_ctrl_sockets:
+  - { name: "dhcp4", type: "unix", socket: "/run/kea/control-dhcp4.sock"}
+kea_ctrl_agent_loggers:
+  - { name: 'kea-ctrl-agent', output: '/var/log/kea-ctrl-agent.log', severity: 'INFO', debuglevel: 0}

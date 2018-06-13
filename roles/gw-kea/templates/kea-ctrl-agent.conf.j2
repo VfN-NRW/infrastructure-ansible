@@ -1,0 +1,38 @@
+{
+  "Control-agent": {
+    "http-host": "{{ kea_ctrl_agent_listen_addr }}",
+    "http-port": {{ kea_ctrl_agent_listen_port }},
+{% if kea_ctrl_agent_ctrl_sockets %}
+    "control-sockets": {
+{% for socket in kea_ctrl_agent_ctrl_sockets %}
+      "{{ socket.name }}": {
+        "socket-type": "{{ socket.type }}",
+        "socket-name": "{{ socket.socket }}"
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+
+    }
+{% endif %}
+  }{% if kea_ctrl_agent_loggers %},
+
+  "Logging": {
+    "loggers": [
+{% for logger in kea_ctrl_agent_loggers %}
+      {
+        "name": "{{ logger.name }}",
+        "output_options": [
+          {
+            "output": "{{ logger.output }}"
+          }
+        ],
+        "severity": "{{ logger.severity }}"
+{% if logger.severity == 'DEBUG' %}
+        "debuglevel": {{ logger.debuglevel }}
+{% endif %}
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+
+    ]
+  }
+{% endif %}
+}

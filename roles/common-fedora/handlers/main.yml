@@ -1,0 +1,11 @@
+---
+
+- name: 'restart sshd'
+  service:
+    name: 'sshd'
+    state: 'restarted'
+
+- name: 'reload firewalld'
+  service:
+    name: 'firewalld'
+    state: 'reloaded'

@@ -1,0 +1,42 @@
+[hypervisors]
+loki.vfn-nrw.de ansible_ssh_user=root 
+host1.vfn-nrw.de
+asterix.rs.freifunk.net
+
+
+[gateways]
+# Leverkusen
+gw1.fflev.de
+#gw2.fflev.de
+gw3.fflev.de
+
+# Remscheid
+gw1.rs.freifunk.net
+#gw2.rs.freifunk.net
+
+# Solingen
+#gw1.sg.freifunk.net:1337 ansible_host=185.97.5.72
+
+# Gummersbach
+gw1.gm.freifunk.net:1337 ansible_host=89.163.241.63
+
+
+[stats]
+stats1.vfn-nrw.de
+
+
+[routers]
+nexus.vfn-nrw.de
+
+
+[builders]
+builder1.vfn-nrw.de
+
+
+[ipaservers]
+auth1.vfn-nrw.de
+auth2.vfn-nrw.de
+
+
+[padservers]
+pad.vfn-nrw.de

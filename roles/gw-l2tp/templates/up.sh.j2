@@ -1,0 +1,11 @@
+#!/bin/bash
+INTERFACE="$3"
+
+if grep -Fq "$8" "/etc/tunneldigger/broker/blacklists/{{ item.name }}"
+then
+	echo "Der Knoten $8 ist auf der Sperrliste, verweigere Zugang."
+	exit 1
+else
+	ip link set dev "$INTERFACE" up mtu {{ l2tp_mtu }}
+	brctl addif tun-{{ communities[item.name].shortname }} "$INTERFACE"
+fi

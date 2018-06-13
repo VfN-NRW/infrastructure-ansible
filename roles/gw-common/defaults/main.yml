@@ -1,0 +1,4 @@
+---
+
+nf_conntrack_max: 262144
+tuned_profile: 'throughput-performance'

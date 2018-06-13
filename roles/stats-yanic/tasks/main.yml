@@ -1,0 +1,75 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'install golang'
+  package:
+    name: 'golang'
+    state: 'latest'
+
+- name: 'install yanic'
+  command: 'go get -v -u github.com/FreifunkBremen/yanic'
+  environment:
+    GOPATH: '/opt/go'
+
+- name: 'create yanic system user'
+  user:
+    name: 'yanic'
+    system: True
+    home: '/var/lib/yanic'
+    createhome: True
+    state: 'present'
+
+- name: 'install instanced yanic unit'
+  copy:
+    src: 'yanic@.service'
+    dest: '/etc/systemd/system'
+  register: yanic_unit_install
+
+- name: 'reload systemd daemon when unit file was installed'
+  command: 'systemctl daemon-reload'
+  when: yanic_unit_install.changed
+
+- name: 'create yanic config dir'
+  file:
+    path: '/etc/yanic'
+    state: 'directory'
+    mode: 0755
+
+- name: 'install yanic config'
+  template: 
+    dest: '/etc/yanic/{{ item.name }}.conf'
+    src: 'yanic.conf.j2'
+    mode: 0644
+    backup: yes
+  with_items:  '{{ serviced_communities }}'
+
+- name: 'create yanic state dirs'
+  file:
+    path: '/var/lib/yanic/{{ item.name }}'
+    state: 'directory'
+    mode: 0755
+    owner: yanic
+    group: yanic
+  with_items:  '{{ serviced_communities }}'
+
+- name: 'create yanic webroots'
+  file:
+    path: '/srv/www/yanic/data/{{ item.name }}'
+    state: 'directory'
+    mode: 0755
+    owner: yanic
+    group: root
+  with_items:  '{{ serviced_communities }}'
+
+- name: 'make sure we have the influxdb python client'
+  package:
+    name: 'python2-influxdb'
+    state: latest
+
+- name: 'create influx databases for communities'
+  influxdb_database:
+    hostname: '{{ influxdb_host }}'
+    database_name: 'ff{{ communities[item.name].shortname }}'
+    state: present
+  with_items:  '{{ serviced_communities }}'

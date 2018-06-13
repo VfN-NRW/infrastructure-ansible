@@ -1,0 +1,8 @@
+---
+
+- name: 'copy NetworkManager idrac config'
+  copy:
+    src: '00-idrac.conf'
+    dest: '/etc/NetworkManager/conf.d'
+  notify:
+    - 'restart NetworkManager'

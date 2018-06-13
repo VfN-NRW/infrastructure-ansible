@@ -1,0 +1,100 @@
+---
+# VfN NRW e.V. Community list
+# Per-Community Parameters:
+#   name: String
+#   shortname: String
+#   v6hextet: Hexadecimal (usually city's area code)
+#   subnet4: IPv4 CIDR
+
+
+communities:
+  badbentheim:
+    name: "Freifunk Bad Bentheim"
+    shortname: bent
+    v6hextet: 5922
+    subnet4: 10.1.0.0/17
+  bergneustadt:
+    name: "Freifunk Bergneustadt"
+    shortname: bns
+    v6hextet: 226a
+    subnet4: 10.250.128.0/17
+  bottrop:
+    name: "Freifunk Bottrop"
+    shortname: bot
+    v6hextet: 2041
+    subnet4: 10.79.0.0/16
+  engelskirchen:
+    name: "Freifunk Engelskirchen"
+    shortname: engl
+    v6hextet: 2263
+    subnet4: 10.141.128.0/17
+  gronau:
+    name: "Freifunk Gronau"
+    shortname: gro
+    v6hextet: 4859
+    subnet4: 10.206.0.0/16
+  gummersbach:
+    name: "Freifunk Gummersbach"
+    shortname: gm
+    v6hextet: 2261
+    subnet4: 10.253.0.0/16
+  hagen:
+    name: "Freifunk Hagen"
+    shortname: ha
+    v6hextet: 2331
+    subnet4: 10.154.0.0/16
+  hueckeswagen:
+    name: "Freifunk Hückeswagen"
+    shortname: hw
+    v6hextet: 2192
+    subnet4: 10.146.0.0/16
+  kuerten:
+    name: "Freifunk Kürten"
+    shortname: krtn
+    v6hextet: 2268
+    subnet4: 10.16.0.0/17
+  lindlar:
+    name: "Freifunk Lindlar"
+    shortname: lind
+    v6hextet: 2266
+    subnet4: 10.141.0.0/17
+  leverkusen:
+    name: "Freifunk Leverkusen"
+    shortname: lev
+    v6hextet: 214
+    subnet4: 10.76.0.0/16
+  marienheide:
+    name: "Freifunk Marienheide"
+    shortname: mhd
+    v6hextet: 2264
+    subnet4: 10.252.128.0/17
+  muelheim:
+    name: "Freifunk Mülheim an der Ruhr"
+    shortname: mh
+    v6hextet: 208
+    subnet4: 10.47.0.0/17
+  neutral:
+    name: "Verbund freier Netzwerke NRW e.V."
+    shortname: vfn
+    v6hextet: ff
+    subnet4: 10.171.0.0/16
+  remscheid:
+    name: "Freifunk Remscheid"
+    shortname: rs
+    v6hextet: 2191
+    subnet4: 10.69.0.0/16
+  solingen:
+    name: "Freifunk Solingen"
+    shortname: sg
+    v6hextet: 212
+    subnet4: 10.6.0.0/16
+  wermelskirchen:
+    name: "Freifunk Wermelskirchen"
+    shortname: wk
+    v6hextet: 2196
+    subnet4: 10.52.0.0/16
+  wipperfuerth:
+    name: "Freifunk Wipperfürth"
+    shortname: wipp
+    v6hextet: 2267
+    subnet4: 10.224.0.0/16

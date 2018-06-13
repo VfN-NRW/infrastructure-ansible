@@ -1,0 +1,79 @@
+---
+
+- name: 'Set SELinux mode to permissive'
+  selinux:
+    state: 'permissive'
+    policy: 'targeted'
+
+- name: 'Enable NetworkManager-1.10 copr'
+  shell: 'dnf -y copr enable heffer/NetworkManager-1.10'
+  args:
+    creates: '/etc/yum.repos.d/_copr_heffer-NetworkManager-1.10.repo'
+  when: ansible_distribution == 'Fedora' and ansible_distribution_version < 28
+
+- name: 'Ensure NetworkManager is latest'
+  package:
+    name: 'NetworkManager'
+    state: 'latest'
+  register: nm_latest
+  when: ansible_distribution == 'Fedora' and ansible_distribution_version < 28
+
+- name: 'Restart NetworkManager if it was updated'
+  service:
+    name: 'NetworkManager'
+    state: 'restarted'
+  when: nm_latest.changed
+
+- name: 'Install Freifunk NetworkManager config'
+  copy:
+    src: 'nm-00-freifunk.conf'
+    dest: '/etc/NetworkManager/conf.d/00-freifunk.conf'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Ensure kernel-modules-extra is installed (for tcp_westwood)'
+  package:
+    name: 'kernel-modules-extra'
+    state: 'latest'
+
+- name: 'install tcp_westwood modules-load config'
+  copy:
+    content: 'tcp_westwood'
+    dest: '/etc/modules-load.d/tcp_westwood.conf'
+
+- name: 'Enable modules-load service'
+  service:
+    name: 'systemd-modules-load'
+    enabled: true
+    state: 'started'
+
+- name: 'Make sure dnf core plugins are present'
+  package:
+    name: 'dnf-plugins-core'
+    state: 'latest'
+
+- name: 'Install tuned'
+  package:
+    name: 'tuned'
+    state: 'latest'
+
+- name: 'Enable tuned'
+  service:
+    name: 'tuned'
+    enabled: true
+    state: 'started'
+
+- name: 'Set tuned profile to {{ tuned_profile }}'
+  shell: 'tuned-adm profile {{ tuned_profile }}'
+
+- name: 'install freifunk sysctl config'
+  copy:
+    src: 'sysctl-99-freifunk.conf'
+    dest: '/etc/sysctl.d/99-freifunk.conf'
+  notify:
+    - 'reload sysctl'
+
+- name: 'install nf_conntrack module config'
+  copy:
+    content: 'options nf_conntrack hashsize={{ (nf_conntrack_max / 4) | int }}'
+    dest: '/etc/modprobe.d/nf_conntrack.conf'

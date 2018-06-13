@@ -1,0 +1,4 @@
+[gateways]
+
+# Example of a local VM entry
+gw0 ansible_host=192.168.122.197

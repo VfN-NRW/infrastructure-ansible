@@ -1,0 +1,67 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'Ensure firewalld bindings are there'
+  package: 
+    name: 'python3-firewall'
+    state: 'latest'
+
+- name: 'Create direct exit rule'
+  copy:
+    content: 'from all fwmark 0xff lookup main prio 100'
+    dest: '/etc/sysconfig/network-scripts/rule-{{ ansible_default_ipv4.alias }}'
+    mode: 0644
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Create community routing rules'
+  template:
+    src: 'ff-routing-rules.j2'
+    dest: '/etc/sysconfig/network-scripts/rule-ff-{{ communities[item.name].shortname }}'
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Enable NetworkManager dispatcher'
+  service:
+    name: 'NetworkManager-dispatcher'
+    enabled: true
+    state: 'started'
+
+- name: 'Add packet mark rule'
+  firewalld:
+    rich_rule: >
+      rule port port='{{ item.port }}' protocol='{{ item.protocol }}' mark set='0xff'
+    zone: 'FreifunkInternal'
+    permanent: true
+    state: 'enabled'
+  with_items: '{{ direct_exit_ports }}'
+  when: direct_exit_ports is defined
+  notify:
+    - 'reload firewalld'
+
+- name: 'Direct exit marked packages'
+  command: >
+    firewall-cmd
+    --permanent
+    --direct
+    --add-rule ipv4 nat POSTROUTING 100
+    -o {{ ansible_default_ipv4.alias }}
+    -m mark --mark 0xff
+    -j SNAT --to-source {{ ansible_default_ipv4.address }}
+  register: direct_exit_result
+  changed_when: >
+    'Warning' not in direct_exit_result
+  when: direct_exit_ports is defined
+  notify:
+    - 'reload firewalld'
+
+- name: 'Masquerade for zone public'
+  firewalld:
+    zone: 'public'
+    masquerade: true
+    permanent: true
+    state: 'enabled'
+  notify:
+    - 'reload firewalld'

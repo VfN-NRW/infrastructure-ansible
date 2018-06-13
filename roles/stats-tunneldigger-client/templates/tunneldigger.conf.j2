@@ -1,0 +1,3 @@
+INTERFACE_NAME="tun-{{ communities[item.name].shortname }}"
+BROKER="{{ item.brokers.pop() }}"
+EXTRA_ARGS="-u {{ ansible_fqdn }} -t {{ communities[item.name].subnet4 | getoctet(2) }} -s /etc/tunneldigger/client/hook-{{ item.name }}.sh{% for broker in item.brokers %} -b {{ broker }}{% endfor %}"

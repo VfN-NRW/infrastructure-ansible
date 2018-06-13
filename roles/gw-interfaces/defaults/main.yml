@@ -1,0 +1,7 @@
+---
+subnet4: '{{ communities[item.name].subnet4 | ipcalc }}'
+community_octet: '{{ communities[item.name].subnet4 | getoctet(2) | int }}'
+community_macid: '{{ communities[item.name].subnet4 | getmacid(2) }}'
+v6anycast: 'fddf:ebfd:a801:{{ communities[item.name].v6hextet }}::ac:1'
+v4ip: '{{ subnet4.host_min | ipadd(255 + item.gateway_id) }}'
+v4prefix: '{{ communities[item.name].subnet4 | ipaddr("prefix") }}'

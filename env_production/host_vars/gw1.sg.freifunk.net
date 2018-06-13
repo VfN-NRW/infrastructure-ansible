@@ -1,0 +1,9 @@
+---
+
+server_id: 5
+server_alias: gw-sg1
+serviced_communities:
+  - { name: solingen, gateway_id: 1 }
+offered_connection_types:
+  - l2tp
+used_exit_method: direct

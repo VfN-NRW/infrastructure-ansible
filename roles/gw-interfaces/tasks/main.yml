@@ -1,0 +1,106 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'Add FreifunkInternal zone'
+  firewalld:
+    zone: FreifunkInternal
+    state: present
+    permanent: true
+  register: zone_add
+
+- name: 'Restart firewalld and NetworkManager immediately, needed to activate new zone'
+  service:
+    name: '{{ item }}'
+    state: 'restarted'
+  with_items:
+    - 'firewalld'
+    - 'NetworkManager'
+  when: zone_add.changed
+
+- name: 'Create community bridges'
+  shell: >
+    nmcli connection add
+    connection.id ff-{{ communities[item.name].shortname }}
+    ifname ff-{{ communities[item.name].shortname }}
+    connection.type bridge
+    bridge.stp off
+    bridge.forward-delay 2
+    bridge.mac-address 02:ca:fe:{{ community_macid }}:{{ '%02d' % item.gateway_id }}:01
+    ipv4.method manual
+    ipv4.address {{ v4ip }}/{{ v4prefix }}
+    ipv6.method manual
+    ipv6.address fddf:ebfd:a801:{{ communities[item.name].v6hextet }}::a{{ item.gateway_id }}/64
+    connection.zone FreifunkInternal
+  args:
+    creates: '/etc/sysconfig/network-scripts/ifcfg-ff-{{ communities[item.name].shortname }}'
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Create community tunnel bridges'
+  shell: >
+    nmcli connection add
+    connection.id tun-{{ communities[item.name].shortname }}
+    ifname tun-{{ communities[item.name].shortname }}
+    connection.type bridge
+    bridge.mac-address 02:ca:fe:{{ community_macid }}:{{ '%02d' % item.gateway_id }}:00
+    bridge.stp off
+    bridge.forward-delay 2
+    ipv4.method disabled
+    ipv6.method ignore
+    connection.zone FreifunkInternal
+  args:
+    creates: '/etc/sysconfig/network-scripts/ifcfg-tun-{{ communities[item.name].shortname }}'
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Allow packets to be forwarded to WAN'
+  command: >
+    firewall-cmd
+    --permanent
+    --direct
+    --add-rule ipv4 filter FORWARD 100
+    -i ff-{{ communities[item.name].shortname }}
+    -o {{ ansible_default_ipv4.alias }}
+    -j ACCEPT
+  register: wan_fwd_result
+  changed_when: >
+    'Warning' not in wan_fwd_result
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'reload firewalld'
+
+- name: 'enable masquerading for FedoraServer when using direct exit'
+  firewalld:
+    zone: 'FedoraServer'
+    masquerade: true
+    permanent: true
+    state: 'enabled'
+  when: used_exit_method == 'direct'
+  notify:
+    - 'reload firewalld'
+
+- name: 'disable masquerading for FedoraServer when not using direct exit'
+  firewalld:
+    zone: 'FedoraServer'
+    masquerade: true
+    permanent: true
+    state: 'disabled'
+  when: used_exit_method != 'direct'
+  notify:
+    - 'reload firewalld'
+
+- name: 'Apply MSS fix'
+  command: >
+    firewall-cmd
+    --permanent
+    --direct
+    --add-passthrough ipv4 -I FORWARD
+    -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+  register: mss_fix_result
+  changed_when: >
+    'Warning' not in mss_fix_result
+  notify:
+    - 'reload firewalld'

@@ -1,0 +1,73 @@
+---
+
+- name: 'Cache gateway IP'
+  set_fact:
+    gateway_ip4: '{{ ansible_default_ipv4.address }}'
+
+- name: 'open vxlan port in firewall'
+  firewalld:
+    port: '4789/udp'
+    permanent: true
+    state: 'enabled'
+
+# This will create a local vxlan tunnel with a transport IP of the following schema:
+# Server ID of server being provisioned: 2
+# Local:  172.16.2.2
+# Remote: 172.16.2.1
+# Requires NetworkManager > 1.10 due to route-table option
+- name: 'Create local tunnel'
+  shell: >
+    nmcli connection add
+    connection.id vxlan-{{ item.1.ifname }}
+    ifname vxlan-{{ item.1.ifname }}
+    connection.type vxlan
+    connection.zone public
+    vxlan.id {{ server_id + 1000 }}
+    vxlan.remote {{ item.1.ip4 }}
+    vxlan.local {{ gateway_ip4 }}
+    vxlan.destination-port 4789
+    ipv4.method manual
+    ipv4.address {{ '172.16.0.0' | ipadd(256 * server_id + 4 * item.0 + 2) }}/30
+    ipv4.route-table {{ vxlan_exit_route_table }}
+    ipv4.gateway {{ '172.16.0.0' | ipadd(256 * server_id + 4 * item.0 + 1) }}
+    ipv6.method ignore
+  args:
+    creates: '/etc/NetworkManager/system-connections/vxlan-{{ item.1.ifname }}'
+  with_indexed_items: '{{ vxlan_exit_peers }}'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'open vxlan port in firewall on remote'
+  delegate_to: '{{ item.1.name }}'
+  firewalld:
+    port: '4789/udp'
+    permanent: true
+    state: 'enabled'
+  when: item.1.create_remote
+  with_indexed_items: '{{ vxlan_exit_peers }}'
+
+- name: 'Create remote tunnel'
+  delegate_to: '{{ item.1.name }}'
+  shell: >
+    nmcli connection add
+    connection.id vxlan-{{ server_alias }}
+    ifname vxlan-{{ server_alias }}
+    connection.type vxlan
+    vxlan.id {{ server_id + 1000 }}
+    vxlan.remote {{ gateway_ip4 }}
+    vxlan.local {{ item.1.ip4 }}
+    vxlan.destination-port 4789
+    ipv4.method manual
+    ipv4.address {{ '172.16.0.0' | ipadd(256 * server_id + 4 * item.0 + 1) }}/30
+    ipv6.method ignore
+  args:
+    creates: '/etc/NetworkManager/system-connections/vxlan-{{ server_alias }}'
+  when: item.1.create_remote
+  with_indexed_items: '{{ vxlan_exit_peers }}'
+  notify:
+    - 'restart NetworkManager'
+
+- name: 'Define vxlan exit routing table'
+  lineinfile:
+    dest: '/etc/iproute2/rt_tables'
+    line: '{{ vxlan_exit_route_table }} exit-vxlan'

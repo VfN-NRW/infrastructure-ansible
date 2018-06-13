@@ -1,0 +1,50 @@
+---
+
+- include_vars: 'communities.yml'
+
+- name: 'Enable kea copr'
+  shell: 'dnf -y copr enable heffer/kea'
+  args:
+    creates: '/etc/yum.repos.d/_copr_heffer-kea.repo'
+
+- name: 'Install kea'
+  package:
+    name: 'kea'
+    state: 'latest'
+
+- name: 'Install kea-dhcp4 config'
+  template:
+    dest: '/etc/kea/kea-dhcp4.conf'
+    src: 'kea-dhcp4.conf.j2'
+    backup: yes
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart kea-dhcp4'
+
+- name: 'Install kea-ctrl-agent config'
+  template:
+    dest: '/etc/kea/kea-ctrl-agent.conf'
+    src: 'kea-ctrl-agent.conf.j2'
+    backup: yes
+  with_items: '{{ serviced_communities }}'
+  notify:
+    - 'restart kea-ctrl-agent'
+
+- name: 'Enable kea-dhcp4'
+  service:
+    name: 'kea-dhcp4'
+    enabled: true
+    state: 'started'
+
+- name: 'Enable kea-ctrl-agent'
+  service:
+    name: 'kea-ctrl-agent'
+    enabled: true
+    state: 'started'
+
+- name: 'Allow DHCP in Freifunk zone'
+  firewalld:
+    service: 'dhcp'
+    permanent: true
+    state: 'enabled'
+    zone: 'FreifunkInternal'

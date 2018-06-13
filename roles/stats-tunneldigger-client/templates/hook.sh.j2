@@ -1,0 +1,16 @@
+#!/bin/sh
+
+COMMUNITY="{{ item.name }}"
+COMMUNITY_SHORT="{{ communities[item.name].shortname }}"
+
+case "$1" in
+	session.up)
+		ip link set "$2" up
+		batctl -m "mesh-${COMMUNITY_SHORT}" if add "$2"
+		ip link set "mesh-${COMMUNITY_SHORT}" up
+		systemctl start "yanic@${COMMUNITY}"
+	;;
+	session.down)
+		systemctl stop "yanic@${COMMUNITY}"
+	;;
+esac

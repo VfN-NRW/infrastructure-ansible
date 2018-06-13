@@ -1,0 +1,88 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [
+{% for community in serviced_communities %}
+        "ff-{{ communities[community.name].shortname }}"{% if not loop.last %},{% endif %}
+{% endfor %}
+
+      ]
+    },
+{%if kea_dhcp4_control_socket %}
+
+    "control-socket": {
+        "socket-type": "unix",
+        "socket-name": "{{ kea_dhcp4_control_socket }}"
+    },
+{% endif %}
+
+    "lease-database": {
+      "type": "memfile",
+      "lfc-interval": {{ kea_dhcp4_lfc_interval }}
+    },
+
+    "valid-lifetime": {{ kea_dhcp4_valid_lifetime }},
+
+{% if kea_dhcp4_dhcp_options %}
+    "option-data": [
+{% for option in kea_dhcp4_dhcp_options %}
+      {
+        "name": "{{ option.name }}",
+        "data": "{{ option.data }}"
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+
+    ],
+{% endif %}
+
+    "subnet4": [
+{% for community in serviced_communities %}
+      {
+        "subnet": "{{ communities[community.name].subnet4 }}",
+        "pools": [
+          {
+{# On gateway with id 1 we leave some room for network services and nextnode IP #}
+{% if community.gateway_id == 1 %}
+            "pool": "{{ communities[community.name].subnet4 | ipsubnet(18, community.gateway_id - 1) | ipaddr('10') | ipaddr('address') }} - {{ communities[community.name].subnet4 | ipsubnet(18, community.gateway_id - 1) | ipaddr('-1') | ipaddr('address') }}"
+{% else %}
+            "pool": "{{ communities[community.name].subnet4 | ipsubnet(18, community.gateway_id - 1) | ipaddr('1') | ipaddr('address') }} - {{ communities[community.name].subnet4 | ipsubnet(18, community.gateway_id - 1) | ipaddr('-1') | ipaddr('address') }}"
+{% endif %}
+          }
+        ],
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "{{ subnet4.host_min | ipadd(255 + community.gateway_id) }}"
+          },
+          {
+            "name": "domain-name-servers",
+            "data": "{{ subnet4.host_min | ipadd(255 + community.gateway_id) }}, 9.9.9.9, 192.76.134.3"
+          }
+        ]
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+
+    ]
+  }{% if kea_dhcp4_loggers %},
+
+  "Logging": {
+    "loggers": [
+{% for logger in kea_dhcp4_loggers %}
+      {
+        "name": "{{ logger.name }}",
+        "output_options": [
+          {
+            "output": "{{ logger.output }}"
+          }
+        ],
+        "severity": "{{ logger.severity }}"
+{% if logger.severity == 'DEBUG' %}
+        "debuglevel": {{ logger.debuglevel }}
+{% endif %}
+      }{% if not loop.last %},{% endif %}
+{% endfor %}
+
+    ]
+  }
+{% endif %}
+}

@@ -1,0 +1,6 @@
+---
+
+ssh_alt_port: 1337
+
+# Fedora 28 is mostly Python3 only
+ansible_python_interpreter: /usr/bin/python3

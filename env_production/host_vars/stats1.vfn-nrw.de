@@ -1,0 +1,7 @@
+---
+
+serviced_communities:
+  - { name: 'leverkusen', brokers: ['gw1.fflev.de:10076', 'gw3.fflev.de:10076'] }
+  - { name: 'remscheid', brokers: ['gw1.rs.freifunk.net:10069', 'gw3.rs.freifunk.net:10069'] }
+  - { name: 'gummersbach', brokers: ['89.163.241.62:10253'] }
+influxdb_host: localhost

@@ -1,0 +1,11 @@
+---
+
+- name: 'reload firewalld'
+  service:
+    name: 'firewalld'
+    state: 'reloaded'
+
+- name: 'restart tunneldigger-broker instances'
+  service:
+    name: 'tunneldigger-broker@{{ item.name }}'
+    state: 'restarted'

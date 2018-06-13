@@ -1,0 +1,13 @@
+{% for community in serviced_communities %}
+{% set subnet4 = communities[community.name].subnet4 | ipcalc %}
+# {{ communities[community.name].name }}
+interface: {{ subnet4.host_min | ipadd(255 + item.gateway_id) }}
+interface: fddf:ebfd:a801:{{ communities[community.name].v6hextet }}::ac:1
+access-control: {{ communities[community.name].subnet4 }} allow
+access-control: fddf:ebfd:a801:{{ communities[community.name].v6hextet }}::/64 allow
+
+local-data: "update.ff{{ communities[item.name].shortname }}. 3600 IN AAAA fddf:ebfd:a801:{{ communities[community.name].v6hextet }}::fff1"
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

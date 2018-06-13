@@ -1,0 +1,12 @@
+[Unit]
+Description=Yet another node info collector
+
+[Service]
+Type=simple
+User=yanic
+ExecStart=/opt/go/bin/yanic serve --config /etc/yanic/%i.conf
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

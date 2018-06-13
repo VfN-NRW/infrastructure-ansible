@@ -1,0 +1,6 @@
+---
+
+l2tp_mtu: 1364
+
+td_log_verbosity: 'ERROR'
+td_log_ip_addresses: 'false'

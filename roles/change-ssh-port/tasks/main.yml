@@ -1,0 +1,39 @@
+---
+
+- name: 'Ensure runtime dependencies are installed'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'libselinux-python'
+    - 'python3-firewall'
+    - 'python3-policycoreutils'
+
+- name: 'Allow non-standard SSH port'
+  seport:
+    ports: '{{ ssh_alt_port }}'
+    proto: 'tcp'
+    setype: 'ssh_port_t'
+    state: 'present'
+
+- name: 'open new SSH port in firewall'
+  firewalld:
+    port: '{{ ssh_alt_port }}/tcp'
+    permanent: true
+    immediate: true
+    state: 'enabled'
+
+- name: 'close old ssh port'
+  firewalld:
+    service: 'ssh'
+    permanent: true
+    immediate: true
+    state: 'disabled'
+
+- name: 'Change SSH port to {{ ssh_alt_port }}'
+  lineinfile:
+    dest: '/etc/ssh/sshd_config'
+    regexp: '^#?Port'
+    line: 'Port {{ ssh_alt_port }}'
+  notify: 
+    - 'restart sshd'
