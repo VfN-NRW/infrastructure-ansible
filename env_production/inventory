@@ -1,7 +1,7 @@
 [hypervisors]
-loki.vfn-nrw.de ansible_ssh_user=root 
 host1.vfn-nrw.de
 asterix.rs.freifunk.net
+nerio.vfn-nrw.de
 
 
 [gateways]
