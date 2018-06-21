@@ -13,6 +13,7 @@ gw3.fflev.de
 # Remscheid
 gw1.rs.freifunk.net
 #gw2.rs.freifunk.net
+gw3.rs.freifunk.net
 
 # Solingen
 #gw1.sg.freifunk.net:1337 ansible_host=185.97.5.72
