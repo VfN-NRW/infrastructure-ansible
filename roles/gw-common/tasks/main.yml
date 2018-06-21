@@ -77,3 +77,11 @@
   copy:
     content: 'options nf_conntrack hashsize={{ (nf_conntrack_max / 4) | int }}'
     dest: '/etc/modprobe.d/nf_conntrack.conf'
+
+- name: 'Disable IPv6 rpfilter'
+  lineinfile:
+    dest: '/etc/ssh/sshd_config'
+    regexp: '^IPv6_rpfilter'
+    line: 'IPv6_rpfilter=no'
+  notify:
+    - 'restart firewalld'

@@ -2,3 +2,8 @@
 
 - name: 'reload sysctl'
   shell: 'sysctl --system'
+
+- name: 'restart firewalld'
+  service:
+    name: 'firewalld'
+    state: 'restarted'
