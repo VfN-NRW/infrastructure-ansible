@@ -1,13 +1,24 @@
 ---
 
-- name: 'Ensure runtime dependencies are installed'
+- name: 'Ensure Fedora runtime dependencies are installed'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'python3-libselinux'
+    - 'python3-firewall'
+    - 'python3-policycoreutils'
+  when: ansible_distribution == 'Fedora'
+
+- name: 'Ensure EL runtime dependencies are installed'
   package:
     name: '{{ item }}'
     state: 'latest'
   with_items:
     - 'libselinux-python'
-    - 'python3-firewall'
-    - 'python3-policycoreutils'
+    - 'python-firewall'
+    - 'policycoreutils-python'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: 'Allow non-standard SSH port'
   seport:
