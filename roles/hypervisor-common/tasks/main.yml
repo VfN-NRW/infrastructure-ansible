@@ -1,0 +1,19 @@
+---
+
+- name: 'Install required repository configs'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'epel-release'
+    - 'centos-release-yum4'
+    - 'centos-release-qemu-ev'
+
+- name: 'Install common packages'
+  package:
+    name: '{{ item }}'
+    state: 'latest'
+  with_items:
+    - 'mosh'
+    - 'vim-enhanced'
+    - 'rkhunter'
