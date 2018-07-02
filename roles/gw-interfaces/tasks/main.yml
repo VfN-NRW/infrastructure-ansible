@@ -28,8 +28,10 @@
     bridge.forward-delay 2
     bridge.mac-address 02:ca:fe:{{ community_macid }}:{{ '%02d' % item.gateway_id }}:01
     ipv4.method manual
+    ipv4.may-fail no
     ipv4.address {{ v4ip }}/{{ v4prefix }}
     ipv6.method manual
+    ipv6.may-fail no
     ipv6.address fddf:ebfd:a801:{{ communities[item.name].v6hextet }}::a{{ item.gateway_id }}/64
     connection.zone FreifunkInternal
   args:
