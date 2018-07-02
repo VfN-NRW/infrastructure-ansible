@@ -17,3 +17,17 @@
     - 'mosh'
     - 'vim-enhanced'
     - 'rkhunter'
+
+- name: 'Install tuned'
+  package:
+    name: 'tuned'
+    state: 'latest'
+
+- name: 'Enable tuned'
+  service:
+    name: 'tuned'
+    enabled: true
+    state: 'started'
+
+- name: 'Set tuned profile to {{ tuned_profile }}'
+  shell: 'tuned-adm profile {{ tuned_profile }}'
