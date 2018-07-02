@@ -2,3 +2,4 @@
 
 # CentOS Python 3 support is meh
 ansible_python_interpreter: /usr/bin/python
+tuned_profile: 'virtual-host'
