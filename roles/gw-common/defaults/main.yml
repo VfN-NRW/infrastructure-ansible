@@ -1,7 +1,7 @@
 ---
 
 nf_conntrack_max: 262144
-tuned_profile: 'throughput-performance'
+tuned_profile: 'virtual-guest'
 
 batman_it: 5000
 batman_mm: disable
