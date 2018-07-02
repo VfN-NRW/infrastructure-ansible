@@ -2,3 +2,10 @@
 
 nf_conntrack_max: 262144
 tuned_profile: 'throughput-performance'
+
+batman_it: 5000
+batman_mm: disable
+batman_gw: server
+batman_bw_down: 1000Mbit
+batman_bw_up: 1000Mbit
+batman_hop_penalty: 120

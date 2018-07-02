@@ -30,6 +30,12 @@
   notify:
     - 'restart kea-ctrl-agent'
 
+- name: install kea NM dispatcher scripts
+  copy:
+    src: '40-ff-kea'
+    dest: '/etc/NetworkManager/dispatcher.d/40-ff-kea'
+    backup: yes
+
 - name: 'Enable kea-dhcp4'
   service:
     name: 'kea-dhcp4'

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "${1:0:4}" = "tun-" ]; then
+    #community="${1:4}"
+    case "$2" in
+        up)
+            /bin/systemctl restart kea-dhcp4 || :
+            ;;
+    esac
+fi

@@ -85,3 +85,11 @@
     line: 'IPv6_rpfilter=no'
   notify:
     - 'restart firewalld'
+
+- name: install NM dispatcher scripts
+  template:
+    src: '{{ item }}.j2'
+    dest: '/etc/NetworkManager/dispatcher.d/{{ item }}'
+    backup: yes
+  with_items:
+    - 41-tun-batman

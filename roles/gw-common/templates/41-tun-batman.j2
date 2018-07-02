@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "${1:0:4}" = "tun-" ]; then
+    community="${1:4}"
+    case "$2" in
+        up)
+            # workaround broken module overrides
+            if ! dmesg | grep -q "batman_adv: loading out-of-tree module taints kernel"; then
+                rmmod batman-adv && sleep 2 && modprobe batman-adv
+            fi
+            batctl -m "mesh-$community" if add "tun-$community"
+            batctl -m "mesh-$community" it {{ batman_it }}
+            batctl -m "mesh-$community" mm {{ batman_mm }}
+            batctl -m "mesh-$community" gw {{ batman_gw }}
+            echo {{ batman_hop_penalty }} > "/sys/class/net/mesh-$community/mesh/hop_penalty"
+            echo "{{ batman_bw_down }}/{{ batman_bw_up }}" > "/sys/devices/virtual/net/mesh-$community/mesh/gw_bandwidth"
+            ip link set "mesh-$community" up
+            brctl addif "ff-$community" "mesh-$community"
+            ;;
+    esac
+fi
