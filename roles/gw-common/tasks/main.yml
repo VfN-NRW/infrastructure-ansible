@@ -80,7 +80,7 @@
 
 - name: 'Disable IPv6 rpfilter'
   lineinfile:
-    dest: '/etc/ssh/sshd_config'
+    dest: '/etc/firewalld/firewalld.conf'
     regexp: '^IPv6_rpfilter'
     line: 'IPv6_rpfilter=no'
   notify:
