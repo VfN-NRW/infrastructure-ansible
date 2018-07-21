@@ -1,0 +1,6 @@
+---
+
+- hosts: 'web' 
+  become: True
+  roles:
+    - { role: 'common-fedora', tags: 'common' }
