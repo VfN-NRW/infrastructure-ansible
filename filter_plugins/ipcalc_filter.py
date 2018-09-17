@@ -75,8 +75,8 @@ class FilterModule (object):
     def getquad(self, value, num):
         return self.getoctet(value, num)
 
-    def getmacid(self, subnet):
-        octet = int(self.getoctet(subnet, 2))
+    def getmacid(self, value, num):
+        octet = int(self.getoctet(value, num))
         if octet > 99:
             return "%02x" % octet
         else:
