@@ -41,12 +41,6 @@
     content: 'tcp_westwood'
     dest: '/etc/modules-load.d/tcp_westwood.conf'
 
-- name: 'Enable modules-load service'
-  service:
-    name: 'systemd-modules-load'
-    enabled: true
-    state: 'started'
-
 - name: 'Make sure dnf core plugins are present'
   package:
     name: 'dnf-plugins-core'
