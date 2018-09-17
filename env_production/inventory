@@ -1,47 +1,47 @@
 [hypervisors]
-host1.vfn-nrw.de
-asterix.rs.freifunk.net
-nerio.vfn-nrw.de
+host1.vfn-nrw.de:1337
+asterix.rs.freifunk.net:1337
+nerio.vfn-nrw.de:1337
 
 
 [gateways]
 # Leverkusen
-gw1.fflev.de
-#gw2.fflev.de
-gw3.fflev.de
+gw1.fflev.de:1337
+#gw2.fflev.de:1337
+gw3.fflev.de:1337
 
 # Remscheid
-gw1.rs.freifunk.net
-#gw2.rs.freifunk.net
-gw3.rs.freifunk.net
+gw1.rs.freifunk.net:1337
+#gw2.rs.freifunk.net:1337
+gw3.rs.freifunk.net:1337
 
 # Solingen
 #gw1.sg.freifunk.net:1337 ansible_host=185.97.5.72
 
 # Gummersbach
-gw1.gm.freifunk.net
+gw1.gm.freifunk.net:1337
 
 
 [stats]
-stats1.vfn-nrw.de
+stats1.vfn-nrw.de:1337
 
 
 [routers]
-nexus.vfn-nrw.de
+nexus.vfn-nrw.de:1337
 
 
 [builders]
-builder1.vfn-nrw.de
+builder1.vfn-nrw.de:1337
 
 
 [ipaservers]
-auth1.vfn-nrw.de
-auth2.vfn-nrw.de
+auth1.vfn-nrw.de:1337
+auth2.vfn-nrw.de:1337
 
 
 [padservers]
-pad.vfn-nrw.de
+pad.vfn-nrw.de:1337
 
 
 [web]
-web1.vfn-nrw.de
+web1.vfn-nrw.de:1337
