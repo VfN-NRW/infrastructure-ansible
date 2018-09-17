@@ -34,6 +34,7 @@
   copy:
     src: '40-ff-kea'
     dest: '/etc/NetworkManager/dispatcher.d/40-ff-kea'
+    mode: 0755
     backup: yes
 
 - name: 'Enable kea-dhcp4'

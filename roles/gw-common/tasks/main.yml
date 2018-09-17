@@ -85,5 +85,6 @@
     src: '{{ item }}.j2'
     dest: '/etc/NetworkManager/dispatcher.d/{{ item }}'
     backup: yes
+    mode: 0755
   with_items:
     - 41-tun-batman
