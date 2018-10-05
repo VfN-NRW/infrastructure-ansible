@@ -34,6 +34,10 @@ nexus.vfn-nrw.de:1337
 builder1.vfn-nrw.de:1337
 
 
+[jenkins]
+jenkins.vfn-nrw.de:1337
+
+
 [ipaservers]
 auth1.vfn-nrw.de:1337
 auth2.vfn-nrw.de:1337
