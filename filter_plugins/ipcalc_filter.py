@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # https://github.com/digineo/ansible-ipcalc
 #
 # save this file in $ansible/filter_plugins/
@@ -12,7 +13,7 @@
 import ipcalc
 
 
-class FilterModule (object):
+class FilterModule(object):
     def filters(self):
         return {
             "ipcalc": self.ipcalc,
