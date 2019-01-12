@@ -1,0 +1,16 @@
+#!/bin/sh
+
+COMMUNITY="{{ item.name }}"
+COMMUNITY_SHORT="{{ communities[item.name].shortname }}"
+
+case "$1" in
+	session.up)
+		ip link set "$2" mtu 1364 up
+		batctl -m "mesh-${COMMUNITY_SHORT}" if add "$2"
+		ip link set "mesh-${COMMUNITY_SHORT}" up
+		ip addr add fddf:ebfd:a801:{{ communities[item.name].v6hextet }}::fff1/64 dev "mesh-${COMMUNITY_SHORT}"
+		ip addr add fddf:ebfd:a801:{{ communities[item.name].v6hextet }}::fff2/64 dev "mesh-${COMMUNITY_SHORT}"
+	;;
+	session.down)
+	;;
+esac
