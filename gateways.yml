@@ -3,8 +3,8 @@
 - hosts: 'gateways' 
   become: True
   roles:
-    - { role: 'change-ssh-port', tags: 'change-ssh-port' }
     - { role: 'common-fedora', tags: 'common' }
+    - { role: 'change-ssh-port', tags: 'change-ssh-port' }
     - { role: 'common-tuned', tags: [ 'common', 'common-tuned' ] }
     - { role: 'gw-common', tags: 'gw-common' }
     - { role: 'common-batman-adv-15', tags: 'common-batman-adv-15' }

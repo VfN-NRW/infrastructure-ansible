@@ -12,6 +12,13 @@
     - 'python3-policycoreutils'
     - 'python-netaddr'
     - 'rkhunter'
+    - 'firewalld'
+
+- name: 'Enable and start firewalld'
+  service:
+    name: 'firewalld'
+    state: started
+    enabled: yes
 
 - name: 'Allow non-standard SSH port'
   seport:
@@ -39,13 +46,20 @@
     dest: '/etc/ssh/sshd_config'
     regexp: '^#?Port'
     line: 'Port {{ ssh_alt_port }}'
-  notify: 
-    - 'restart sshd'
+  register: ssh_port
+
+- name: 'Restart sshd if it was updated'
+  service:
+    name: 'sshd'
+    state: 'restarted'
+    enabled: true
+  when: ssh_port.changed
 
 - name: 'Disable cockpit'
   systemd:
     name: cockpit.socket
     enabled: false
+  ignore_errors: True
 
 - name: 'Disable cockpit in firewall'
   firewalld:

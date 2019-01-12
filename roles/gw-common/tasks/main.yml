@@ -5,23 +5,24 @@
     state: 'permissive'
     policy: 'targeted'
 
-- name: 'Enable NetworkManager-1.10 copr'
-  shell: 'dnf -y copr enable heffer/NetworkManager-1.10'
+- name: 'Enable NetworkManager-gretap copr'
+  shell: 'dnf -y copr enable heffer/NetworkManager-gretap'
   args:
-    creates: '/etc/yum.repos.d/_copr_heffer-NetworkManager-1.10.repo'
-  when: ansible_distribution == 'Fedora' and ansible_distribution_version < 28
+    creates: '/etc/yum.repos.d/_copr_heffer-NetworkManager-gretap.repo'
+  when: ansible_distribution == 'Fedora' and ansible_distribution_version|int < 30
 
 - name: 'Ensure NetworkManager is latest'
   package:
     name: 'NetworkManager'
     state: 'latest'
   register: nm_latest
-  when: ansible_distribution == 'Fedora' and ansible_distribution_version < 28
+  when: ansible_distribution == 'Fedora' and ansible_distribution_version|int < 30
 
 - name: 'Restart NetworkManager if it was updated'
   service:
     name: 'NetworkManager'
     state: 'restarted'
+    enabled: true
   when: nm_latest.changed
 
 - name: 'Install Freifunk NetworkManager config'
