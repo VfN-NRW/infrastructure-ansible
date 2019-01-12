@@ -10,6 +10,9 @@ gw1.fflev.de:1337
 #gw2.fflev.de:1337
 gw3.fflev.de:1337
 
+# Lindlar
+gw1.freifunk-lindlar.net:1337
+
 # Remscheid
 gw1.rs.freifunk.net:1337
 #gw2.rs.freifunk.net:1337
@@ -21,6 +24,8 @@ gw3.rs.freifunk.net:1337
 # Gummersbach
 gw1.gm.freifunk.net:1337
 
+# Wermelskirchen
+gw1.wk.freifunk.net:22
 
 [stats]
 stats1.vfn-nrw.de:1337
