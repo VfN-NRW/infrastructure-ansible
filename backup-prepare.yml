@@ -1,0 +1,23 @@
+---
+
+- name: talk to all hosts just so we can learn about them
+  hosts: all
+  tasks:
+    - name: Classify hosts depending on their virtualization state
+      group_by:
+        key: kvm_{{ ansible_facts['virtualization_role'] }}
+
+- hosts: kvm_guest
+  gather_facts: False
+  become: yes
+  tasks:
+    - name: Clear DNF cache
+      command: 'dnf clean all'
+
+    - name: Clear Yum cache
+      command: 'yum clean all'
+ 
+    - name: 'fstrim all filesystems'
+      command: 'fstrim -av'
+      async: 7200
+      poll: 30
