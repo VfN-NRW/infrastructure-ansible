@@ -19,7 +19,7 @@ gw1.rs.freifunk.net:1337
 gw3.rs.freifunk.net:1337
 
 # Solingen
-#gw1.sg.freifunk.net:1337 ansible_host=185.97.5.72
+gw1.freifunk-in-solingen.de:1337
 
 # Gummersbach
 gw1.gm.freifunk.net:1337
