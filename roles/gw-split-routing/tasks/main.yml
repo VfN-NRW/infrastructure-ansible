@@ -7,6 +7,11 @@
     name: 'python3-firewall'
     state: 'latest'
 
+- name: 'Ensure we have NetworkManager-dispatcher-routing-rules'
+  package:
+    name: 'NetworkManager-dispatcher-routing-rules'
+    state: 'latest'
+
 - name: 'Create direct exit rule'
   copy:
     content: 'from all fwmark 0xff lookup main prio 100'
