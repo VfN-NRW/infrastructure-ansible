@@ -1,6 +1,6 @@
 ---
 
-- hosts: 'stats' 
+- hosts: 'stats'
   become: True
   roles:
     - { role: 'common-fedora', tags: 'common' }

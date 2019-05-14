@@ -16,7 +16,7 @@
 
     - name: Clear Yum cache
       command: 'yum clean all'
- 
+
     - name: 'fstrim all filesystems'
       command: 'fstrim -av'
       async: 7200

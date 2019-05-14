@@ -50,7 +50,7 @@
 
 - name: 'open ports in firewall'
   firewalld:
-    port: '{{ communities[item.name].subnet4 | getoctet(2) | int + 10000}}/udp'
+    port: '{{ communities[item.name].subnet4 | getoctet(2) | int + 10000 }}/udp'
     permanent: true
     state: 'enabled'
   with_items: '{{ serviced_communities }}'
