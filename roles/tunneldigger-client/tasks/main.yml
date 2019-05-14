@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'make sure dnf core plugins are present'
   package:
     name: 'dnf-plugins-core'

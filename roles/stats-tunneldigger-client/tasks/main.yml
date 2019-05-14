@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'install tunneldigger client hooks'
   template:
     src: 'hook.sh.j2'

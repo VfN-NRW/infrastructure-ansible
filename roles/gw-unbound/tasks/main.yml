@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'Install unbound'
   package:
     name: 'unbound'
