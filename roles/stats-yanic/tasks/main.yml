@@ -27,7 +27,8 @@
   register: yanic_unit_install
 
 - name: 'reload systemd daemon when unit file was installed'
-  command: 'systemctl daemon-reload'
+  systemd:
+    daemon_reload: yes
   when: yanic_unit_install.changed
 
 - name: 'create yanic config dir'
@@ -37,7 +38,7 @@
     mode: 0755
 
 - name: 'install yanic config'
-  template: 
+  template:
     dest: '/etc/yanic/{{ item.name }}.conf'
     src: 'yanic.conf.j2'
     mode: 0644

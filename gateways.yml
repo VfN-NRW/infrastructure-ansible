@@ -1,6 +1,6 @@
 ---
 
-- hosts: 'gateways' 
+- hosts: 'gateways'
   become: True
   roles:
     - { role: 'common-fedora', tags: 'common' }

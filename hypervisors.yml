@@ -1,6 +1,6 @@
 ---
 
-- hosts: 'hypervisors' 
+- hosts: 'hypervisors'
   become: True
   roles:
     - { role: 'change-ssh-port', tags: 'change-ssh-port' }

@@ -1,6 +1,6 @@
 ---
 
-- hosts: 'routers' 
+- hosts: 'routers'
   become: True
   roles:
     - { role: 'common-fedora', tags: 'common' }
