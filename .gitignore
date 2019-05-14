@@ -1,6 +1,45 @@
-*.retry
-
-*.pyc
-
 debug.yml
 debug.j2
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+.AppleDouble
+.LSOverride
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Compiled Python files
+*.pyc
+
+# Application specific files
+venv
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ansible-specific
+*.retry
+
+# vagrant-specific
+.vagrant
