@@ -4,4 +4,5 @@
 
   tasks:
   - name: get os version
-    debug: msg="System {{ inventory_hostname }} is {{ ansible_distribution }} {{ ansible_distribution_release }} ({{ ansible_kernel }})"
+    debug:
+      msg: "System {{ inventory_hostname }} is {{ ansible_distribution }} {{ ansible_distribution_release }} ({{ ansible_kernel }})"

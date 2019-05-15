@@ -3,6 +3,11 @@
 - hosts: 'hypervisors'
   become: True
   roles:
-    - { role: 'change-ssh-port', tags: 'change-ssh-port' }
-    - { role: 'common-tuned', tags: [ 'common', 'common-tuned' ] }
-    - { role: 'hypervisor-common', tags: 'hypervisor-common' }
+    - role: 'change-ssh-port'
+      tags: 'change-ssh-port'
+    - role: 'common-tuned'
+      tags:
+        - 'common'
+        - 'common-tuned'
+    - role: 'hypervisor-common'
+      tags: 'hypervisor-common'

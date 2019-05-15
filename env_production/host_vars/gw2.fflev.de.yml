@@ -2,8 +2,12 @@
 
 server_id: 2
 server_alias: gw-lev2
+
 serviced_communities:
-  - { name: leverkusen, gateway_id: 2 }
+  - name: leverkusen
+    gateway_id: 2
+
 offered_connection_types:
   - l2tp
+
 used_exit_method: direct

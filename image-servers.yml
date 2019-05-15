@@ -3,6 +3,11 @@
 - hosts: 'images'
   become: True
   roles:
-    - { role: 'common-fedora', tags: 'common' }
-    - { role: 'common-batman-adv-15', tags: ['common', 'common-batman-adv-15'] }
-    - { role: 'images-tunneldigger-client', tags: 'tunneldigger-client' }
+    - role: 'common-fedora'
+      tags: 'common'
+    - role: 'common-batman-adv-15'
+      tags:
+        - 'common'
+        - 'common-batman-adv-15'
+    - role: 'images-tunneldigger-client'
+      tags: 'tunneldigger-client'

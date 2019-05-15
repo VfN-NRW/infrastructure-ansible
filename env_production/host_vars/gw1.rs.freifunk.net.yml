@@ -2,19 +2,36 @@
 
 server_id: 3
 server_alias: gw-rs1
+
 serviced_communities:
-  - { name: remscheid, gateway_id: 1 }
+  - name: remscheid
+    gateway_id: 1
+
 offered_connection_types:
   - l2tp
+
 used_exit_method: vxlan
+
 vxlan_exit_peers:
-  - { name: 'nexus.vfn-nrw.de', ip4: '185.97.5.68', ifname: 'nexus', create_remote: True }
+  - name: 'nexus.vfn-nrw.de'
+    ip4: '185.97.5.68'
+    ifname: 'nexus'
+    create_remote: True
+
 direct_exit_ports:
-  - { port: 22, protocol: tcp }
-  - { port: 80, protocol: tcp }
-  - { port: 8080, protocol: tcp }
-  - { port: 443, protocol: tcp }
-  - { port: 5223, protocol: tcp }
-  - { port: 443, protocol: udp }
-  - { port: 500, protocol: udp }
-  - { port: 4500, protocol: udp }
+  - port: 22
+    protocol: tcp
+  - port: 80
+    protocol: tcp
+  - port: 8080
+    protocol: tcp
+  - port: 443
+    protocol: tcp
+  - port: 5223
+    protocol: tcp
+  - port: 443
+    protocol: udp
+  - port: 500
+    protocol: udp
+  - port: 4500
+    protocol: udp
