@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'Ensure firewalld bindings are there'
   package:
     name: 'python3-firewall'

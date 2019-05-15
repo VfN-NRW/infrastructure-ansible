@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'install golang'
   package:
     name: 'golang'

@@ -1,7 +1,5 @@
 ---
 
-- include_vars: 'communities.yml'
-
 - name: 'Enable kea copr'
   shell: 'dnf -y copr enable heffer/kea'
   args:
