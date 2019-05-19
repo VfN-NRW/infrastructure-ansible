@@ -3,17 +3,43 @@
 - hosts: 'gateways'
   become: True
   roles:
-    - { role: 'common-fedora', tags: 'common' }
-    - { role: 'change-ssh-port', tags: 'change-ssh-port' }
-    - { role: 'common-tuned', tags: [ 'common', 'common-tuned' ] }
-    - { role: 'gw-common', tags: 'gw-common' }
-    - { role: 'common-batman-adv-15', tags: 'common-batman-adv-15' }
-    - { role: 'gw-interfaces', tags: 'gw-interfaces' }
-    - { role: 'gw-unbound', tags: 'gw-unbound' }
-    - { role: 'gw-l2tp', tags: 'gw-l2tp', when: "'l2tp' in offered_connection_types" }
-# TODO    - { role: gw-fastd, tags: "gw-fastd", when: "'fastd' in offered_connection_types"  }
-    - { role: 'gw-kea', tags: 'gw-kea' }
-    - { role: 'gw-split-routing', tags: 'gw-split-routing', when: "used_exit_method != 'direct'" }
-# TODO   - { role: 'gw-exit-openvpn', tags: ['gw-exit', 'gw-exit-openvpn'], when: "used_exit_method == 'openvpn' and used_vpn_accounts is defined" }
-# TODO   - { role: 'gw-exit-gre', tags: ['gw-exit', 'gw-exit-gre'], when: "used_exit_method == 'gre'" }
-    - { role: 'gw-exit-vxlan', tags: ['gw-exit', 'gw-exit-vxlan'], when: "used_exit_method == 'vxlan'" }
+    - role: 'common-fedora'
+      tags: 'common'
+    - role: 'change-ssh-port'
+      tags: 'change-ssh-port'
+    - role: 'common-tuned'
+      tags:
+        - 'common'
+        - 'common-tuned'
+    - role: 'gw-common'
+      tags: 'gw-common'
+    - role: 'common-batman-adv-15'
+      tags: 'common-batman-adv-15'
+    - role: 'gw-interfaces'
+      tags: 'gw-interfaces'
+    - role: 'gw-unbound'
+      tags: 'gw-unbound'
+    - role: 'gw-l2tp'
+      tags: 'gw-l2tp'
+      when: "'l2tp' in offered_connection_types"
+    # @TODO
+    # - role: gw-fastd
+    #   tags: "gw-fastd"
+    #   when: "'fastd' in offered_connection_types"
+    - role: 'gw-kea'
+      tags: 'gw-kea'
+    - role: 'gw-split-routing'
+      tags: 'gw-split-routing'
+      when: "used_exit_method != 'direct'"
+    # @TODO
+    # - role: 'gw-exit-openvpn'
+    #   tags: ['gw-exit', 'gw-exit-openvpn']
+    #   when: "used_exit_method == 'openvpn' and used_vpn_accounts is defined"
+    # - role: 'gw-exit-gre'
+    #   tags: ['gw-exit', 'gw-exit-gre']
+    #   when: "used_exit_method == 'gre'"
+    - role: 'gw-exit-vxlan'
+      tags:
+        - 'gw-exit'
+        - 'gw-exit-vxlan'
+      when: "used_exit_method == 'vxlan'"

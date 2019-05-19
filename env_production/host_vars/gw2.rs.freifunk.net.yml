@@ -2,8 +2,12 @@
 
 server_id: 4
 server_alias: gw-rs2
+
 serviced_communities:
-  - { name: remscheid, gateway_id: 2 }
+  - name: remscheid
+    gateway_id: 2
+
 offered_connection_types:
   - l2tp
+
 used_exit_method: direct

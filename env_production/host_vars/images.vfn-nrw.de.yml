@@ -1,7 +1,17 @@
 ---
 
 serviced_communities:
-  - { name: 'leverkusen', brokers: ['gw1.fflev.de:10076', 'gw3.fflev.de:10076'] }
-  - { name: 'remscheid', brokers: ['gw1.rs.freifunk.net:10069', 'gw3.rs.freifunk.net:10069'] }
-  - { name: 'gummersbach', brokers: ['gw1.gm.freifunk.net:10253'] }
-  - { name: 'solingen', brokers: ['gw1.freifunk-in-solingen.de:10006'] }
+  - name: 'leverkusen'
+    brokers:
+      - 'gw1.fflev.de:10076'
+      - 'gw3.fflev.de:10076'
+  - name: 'remscheid'
+    brokers:
+      - 'gw1.rs.freifunk.net:10069'
+      - 'gw3.rs.freifunk.net:10069'
+  - name: 'gummersbach'
+    brokers:
+      - 'gw1.gm.freifunk.net:10253'
+  - name: 'solingen'
+    brokers:
+      - 'gw1.freifunk-in-solingen.de:10006'

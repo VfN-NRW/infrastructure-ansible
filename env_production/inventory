@@ -3,7 +3,6 @@ host1.vfn-nrw.de:1337
 asterix.rs.freifunk.net:1337
 nerio.vfn-nrw.de:1337
 
-
 [gateways]
 # Leverkusen
 gw1.fflev.de:1337
@@ -30,10 +29,8 @@ gw1.wk.freifunk.net:22
 [stats]
 stats1.vfn-nrw.de:1337
 
-
 [routers]
 nexus.vfn-nrw.de:1337
-
 
 [builders]
 builder1.vfn-nrw.de:1337
@@ -44,15 +41,12 @@ images.vfn-nrw.de:1337
 [jenkins]
 jenkins.vfn-nrw.de:1337
 
-
 [ipaservers]
 auth1.vfn-nrw.de:1337
 auth2.vfn-nrw.de:1337
 
-
 [padservers]
 pad.vfn-nrw.de:1337
-
 
 [web]
 web1.vfn-nrw.de:1337

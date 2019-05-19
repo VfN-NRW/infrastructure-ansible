@@ -5,16 +5,16 @@
   become: True
 
   tasks:
-  - name: 'do dnf upgrade'
-    command: 'dnf -y --refresh upgrade'
-    async: 7200
-    poll: 30
+    - name: 'do dnf upgrade'
+      command: 'dnf -y --refresh upgrade'
+      async: 7200
+      poll: 30
 
-  - name: 'check for rkhunter'
-    command: '/usr/bin/test -f /usr/bin/rkhunter'
-    register: rkhunter
-    ignore_errors: True
+    - name: 'check for rkhunter'
+      command: '/usr/bin/test -f /usr/bin/rkhunter'
+      register: rkhunter
+      ignore_errors: True
 
-  - name: 'run rkhunter --propupd'
-    command: '/usr/bin/rkhunter --propupd'
-    when: 'rkhunter is success'
+    - name: 'run rkhunter --propupd'
+      command: '/usr/bin/rkhunter --propupd'
+      when: 'rkhunter is success'

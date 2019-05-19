@@ -3,7 +3,13 @@
 - hosts: 'stats'
   become: True
   roles:
-    - { role: 'common-fedora', tags: 'common' }
-    - { role: 'common-batman-adv-15', tags: ['common', 'common-batman-adv-15'] }
-    - { role: 'stats-tunneldigger-client', tags: 'stats-tunneldigger-client' }
-    - { role: 'stats-yanic', tags: 'stats-yanic' }
+    - role: 'common-fedora'
+      tags: 'common'
+    - role: 'common-batman-adv-15'
+      tags:
+        - 'common'
+        - 'common-batman-adv-15'
+    - role: 'stats-tunneldigger-client'
+      tags: 'stats-tunneldigger-client'
+    - role: 'stats-yanic'
+      tags: 'stats-yanic'
